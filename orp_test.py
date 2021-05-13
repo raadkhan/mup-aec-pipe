@@ -48,9 +48,10 @@ import sys
 import os
 from time import sleep
 import argparse
-
 import serial
-
+import random
+import array
+from array import array
 # Import local versions of orp_protocol and simple_hdlc
 if sys.version_info[0] == 2:
     # Python 2 - hack
@@ -68,8 +69,10 @@ else:
     import modules.orp_protocol as orp_protocol
     from modules.orp_protocol import decode_response
     from modules.orp_protocol import encode_request
-
-
+    
+    #testing
+    from modules.orp_protocol import encode_push 
+    from modules.orp_protocol import encode_create
 #
 # Function to automatically reply to sync
 #
@@ -127,6 +130,8 @@ parser.add_argument('--b', help='baudrate of serial port. Example 115200, defaul
 parser.add_argument('--no-auto-ack', help='Disable automatic responses', action='store_false', required=False, default=True)
 args = parser.parse_args()
 
+
+
 dev=args.dev
 baud=9600
 auto_ack = True
@@ -150,8 +155,17 @@ if auto_ack == False:
     print('auto-acknowledgements disabled')
 print('enter commands\n')
 
+#Testing code
+print('ORP Serial Client - "t" to test')
+#test
+data=[]
+data=[100]
+
 packet = ''
 preamble = '~~'
+
+
+
 
 while True:
     if sys.version_info[0] == 2:
@@ -161,6 +175,48 @@ while True:
     if request == 'q':
         print('exiting')
         break
+    
+    #testing code
+    if request == 't':
+        request = 'create input num test'
+        request = request.rstrip()
+        if request != "":
+            packet = encode_request(request)
+
+        if packet != None:
+            s0 = ord(packet[2])
+            s1 = ord(packet[3])
+            prestr = 'Sending: ' + packet[0] + packet[1] + str(s0) + str(s1)
+            print((prestr + packet[4:75] + '..') if len(packet) > 75  else (prestr + packet[4:]))
+
+			# Wake up the WP UART with a preamble of 0x7E bytes
+            s.write(preamble.encode())
+            sleep(0.1)
+            s.write(preamble.encode())
+
+            h.sendFrame(packet.encode())
+            sleep(0.5)
+            
+        random_value=str(random.randint(1,1000))
+        request = 'push num test 0 %s' % (random_value)
+        request = request.rstrip()
+        if request != "":
+            packet = encode_request(request)
+
+        if packet != None:
+            s0 = ord(packet[2])
+            s1 = ord(packet[3])
+            prestr = 'Sending: ' + packet[0] + packet[1] + str(s0) + str(s1)
+            print((prestr + packet[4:75] + '..') if len(packet) > 75  else (prestr + packet[4:]))
+
+			# Wake up the WP UART with a preamble of 0x7E bytes
+            s.write(preamble.encode())
+            sleep(0.1)
+            s.write(preamble.encode())
+
+            h.sendFrame(packet.encode())
+            sleep(0.5)
+            break
 
 	# remove trailing whitespace
     request = request.rstrip()
