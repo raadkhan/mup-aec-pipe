@@ -223,12 +223,23 @@ while True:
             cv2.rectangle(frame, (xmin, label_ymin-labelSize[1]-10), (xmin+labelSize[0], label_ymin+baseLine-10), (255, 255, 255), cv2.FILLED) # Draw white box to put label text in
             cv2.putText(frame, label, (xmin, label_ymin-7), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 0), 2) # Draw label text
             
-            #added code
+            #code added by Seungmin
+            # if Human is detected and confidentility is high enough, execute the following code:
             if object_name == 'person' and int(scores[i]*100) >50 :
                 
+                #Captured image is saved as "image"
                 image=videostream.read()
-                cv2.imwrite('opencv.png',image)
-                print("Human Detected. Image is saved")
+
+                #Convert Captured image to JPG(binary file) and save to buffer. Return value(retval) is set true if image is captured.
+                retval, buffer =cv2.imencode('.jpg',image)
+
+                #Convert to base64 encoding and show first 80 string info
+                jpg_as_text = base64.b64encode(buffer)
+                print(jpg_as_text[:80])
+
+                #(No longer is used)Save the image file as 'opencv.png' save in directory. 
+                #cv2.imwrite('opencv.png',image)
+                #print("Human Detected. Image is saved")
                 
     # Draw framerate in corner of frame
     cv2.putText(frame,'FPS: {0:.2f}'.format(frame_rate_calc),(30,50),cv2.FONT_HERSHEY_SIMPLEX,1,(255,255,0),2,cv2.LINE_AA)
