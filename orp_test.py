@@ -49,7 +49,7 @@ import serial
 from random import randint
 #added by Seungmin
 #orp_test.py executes TFLite_detection_webcam.py file 
-sys.path.append('/C:\Users\seung\Documents\Capstone\mup-aec-pipe\tflite1')
+sys.path.append('../tflite1')
 import TFLite_detection_webcam
 #execute the file
 execfile('TFLite_dtection_webcam.py')

@@ -75,8 +75,10 @@ class VideoStream:
 
 # Define and parse input arguments
 parser = argparse.ArgumentParser()
-parser.add_argument('--modeldir', help='Folder the .tflite file is located in',
-                    required=True)
+
+#for orp, 'Sample_TFLite_model' will be used as default
+#parser.add_argument('--modeldir', help='Folder the .tflite file is located in',
+#                    default='Sample_TFLite_model')
 parser.add_argument('--graph', help='Name of the .tflite file, if different than detect.tflite',
                     default='detect.tflite')
 parser.add_argument('--labels', help='Name of the labelmap file, if different than labelmap.txt',
@@ -90,7 +92,8 @@ parser.add_argument('--edgetpu', help='Use Coral Edge TPU Accelerator to speed u
 
 args = parser.parse_args()
 
-MODEL_NAME = args.modeldir
+#MODEL_NAME = args.modeldir
+MODEL_NAME = 'Sample_TFLite_model'
 GRAPH_NAME = args.graph
 LABELMAP_NAME = args.labels
 min_conf_threshold = float(args.threshold)
