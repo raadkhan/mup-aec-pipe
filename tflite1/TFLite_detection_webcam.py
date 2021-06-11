@@ -27,7 +27,12 @@ import time
 from threading import Thread
 import importlib.util
 from picamera import PiCamera
-#from picamera import PiCamera
+
+#added by Seungmin
+#Adding the upper directory so that orp_test.py can communicate with this this file.
+sys.path.append('..')
+import test2
+#import orp_test
 
 # Define VideoStream class to handle streaming of video from webcam in separate processing thread
 # Source - Adrian Rosebrock, PyImageSearch: https://www.pyimagesearch.com/2015/12/28/increasing-raspberry-pi-fps-with-python-and-opencv/
@@ -234,15 +239,15 @@ while True:
                 image=videostream.read()
 
                 #Convert Captured image to JPG(binary file) and save to buffer. Return value(retval) is set true if image is captured.
-                retval, buffer =cv2.imencode('.jpg',image)
+               # retval, buffer =cv2.imencode('.jpg',image)
 
                 #Convert to base64 encoding and show first 80 string info
-                jpg_as_text = base64.b64encode(buffer)
-                print(jpg_as_text[:80])
+               # jpg_as_text = base64.b64encode(buffer)
+               # print(jpg_as_text[:80])
 
                 #(No longer is used)Save the image file as 'opencv.png' save in directory. 
-                #cv2.imwrite('opencv.png',image)
-                #print("Human Detected. Image is saved")
+                cv2.imwrite('opencv.png',image)
+                print("Human Detected. Image is saved")
                 
     # Draw framerate in corner of frame
     cv2.putText(frame,'FPS: {0:.2f}'.format(frame_rate_calc),(30,50),cv2.FONT_HERSHEY_SIMPLEX,1,(255,255,0),2,cv2.LINE_AA)

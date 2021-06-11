@@ -47,13 +47,6 @@ import os
 from time import sleep
 import serial
 from random import randint
-#added by Seungmin
-#orp_test.py executes TFLite_detection_webcam.py file 
-sys.path.append('../tflite1')
-import TFLite_detection_webcam
-#execute the file
-execfile('TFLite_dtection_webcam.py')
-
 
 # Import local versions of orp_protocol and simple_hdlc
 if sys.version_info[0] == 2:
