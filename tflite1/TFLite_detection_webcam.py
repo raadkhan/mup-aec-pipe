@@ -245,6 +245,9 @@ while True:
                 #Convert to base64 encoding and show first 80 string info
                 jpg_as_text = base64.b64encode(buffer)
                 print(jpg_as_text[:80])
+                
+                #once human is detected, it call the orp_test.py
+               # import orp_test
 
                 #(No longer is used)Save the image file as 'opencv.png' save in directory. 
                 #cv2.imwrite('opencv.png',image)
