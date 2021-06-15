@@ -145,76 +145,93 @@ h = HDLC(s)
 h.startReader(onFrame=frame_callback)
 
 # Provide information to users
-print('Welcome to ORP VPS Client')
+print('Welcome to ORP VPS Client. To test, cease the program and start again with an additional argument. "t" ' )
 print('device: ' + dev + ', speed: ' + baud + ', 8N1')
 
 packet = ''
 preamble = '~~'
 
 while True:
-    if sys.version_info[0] == 2:
-        request = raw_input('> ')
-    else:
-        request = input('> ')
-    
-    #type 't' goes to test and send json file
-    if request == 't':
-        print('start testing')
+    if len(sys.argv) >=  2:
+        if sys.version_info[0] == 2:
+            request = raw_input('> ')
+        else:
+            request = input('> ')
         
-        #first it creates data type 'vps_data'
-        request = 'create input json vps_data'
-        encode_and_send(request)
-        
-        #then it example json file to 'vps_data' with default value
-        request = 'example json vps_data "{"object":"HU", "confidence":99}"'
-        encode_and_send(request)
-        
-        try:
-            #Send json object 'human' with random confident level between 50 and 100
-            while True:
-                vps_data = '{{"object":"HU", "confidence":{0}}}'.format(randint(50, 100))
-                request = 'push json vps_data 0 {0}'.format(vps_data)
-                encode_and_send(request)
-                
-                #send one json file every one mintue
-                sleep(60)
-
-        #To trigger the KeyboardInterrupt, type ctrl+c                
-        except KeyboardInterrupt:
-            print('interrupted testing')
+        #type 't' goes to test and send json file
+        if  request == 't':
+            print('start testing')
             
-            request = 'delete resource vps_data'
+            #first it creates data type 'vps_data'
+            request = 'create input json vps_data'
             encode_and_send(request)
+            
+            #then it example json file to 'vps_data' with default value
+            request = 'example json vps_data "{"object":"HU", "confidence":99}"'
+            encode_and_send(request)
+            
+            try:
+                #Send json object 'human' with random confident level between 50 and 100
+                while True:
+                    vps_data = '{{"object":"HU", "confidence":{0}}}'.format(randint(50, 100))
+                    request = 'push json vps_data 0 {0}'.format(vps_data)
+                    encode_and_send(request)
+                    
+                    #send one json file every one mintue
+                    sleep(60)
 
-    #type 's' will send an example of base64 string
-    elif request == 's':
-        print('start shooting')
-        
-        #first creates data type 'vps_shot'
-        request = 'create input str vps_shot'
-        encode_and_send(request)
-
-        #send one vps_shot every one minute
-        try:
-            while True:
-                request = 'push str vps_shot 0 {0}'.format(vps_shot_example)
+            #To trigger the KeyboardInterrupt, type ctrl+c                
+            except KeyboardInterrupt:
+                print('interrupted testing')
+                
+                request = 'delete resource vps_data'
                 encode_and_send(request)
-                sleep(60)
 
-        except KeyboardInterrupt:
-            print('interrupted shooting')
-            request = 'delete resource vps_shot'
+        #type 's' will send an example of base64 string
+        elif request == 's':
+            print('start shooting')
+            
+            #first creates data type 'vps_shot'
+            request = 'create input str vps_shot'
             encode_and_send(request)
 
-    #type 'q' will terminate the program
-    elif request == 'q':
-        s.close()
-        break
+            #send one vps_shot every one minute
+            try:
+                while True:
+                    request = 'push str vps_shot 0 {0}'.format(vps_shot_example)
+                    encode_and_send(request)
+                    sleep(60)
 
-    #Users can also type any commend they want. ex) 'create input str vps_shot' can be manually typed.
-    else:        
-        # remove trailing whitespace
-        request = request.rstrip()
-        if request != "":
-            packet = encode_request(request)
-               
+            except KeyboardInterrupt:
+                print('interrupted shooting')
+                request = 'delete resource vps_shot'
+                encode_and_send(request)
+
+        #type 'q' will terminate the program
+        elif request == 'q':
+            s.close()
+            break
+        
+           #Users can also type any commend they want. ex) 'create input str vps_shot' can be manually typed.
+        else:        
+            # remove trailing whitespace
+            request = request.rstrip()
+            if request != "":
+                packet = encode_request(request)
+    
+      #if there is no additional argument, the program send base64 string.
+    else:
+       read_file = open ('./tflite1/encoded_string.txt', 'r')
+       data = read_file.read()
+
+       #first creates data type 'vps_shot'
+       request = 'create input str vps_shot'
+       encode_and_send(request)
+
+       #send one vps_shot every one minute
+       while True:
+           request = 'push str vps_shot 0 {0}'.format(data)
+           encode_and_send(request)
+           #print (data)
+           sleep(60)
+
