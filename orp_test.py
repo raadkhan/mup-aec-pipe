@@ -47,6 +47,7 @@ import os
 from time import sleep
 import serial
 from random import randint
+import filecmp 
 
 # Import local versions of orp_protocol and simple_hdlc
 if sys.version_info[0] == 2:
@@ -145,11 +146,12 @@ h = HDLC(s)
 h.startReader(onFrame=frame_callback)
 
 # Provide information to users
-print('Welcome to ORP VPS Client. To test, cease the program and start again with an additional argument. "t" ' )
+print('Welcome to ORP VPS Client. To test, restart the program with an additional argument. "t" ' )
 print('device: ' + dev + ', speed: ' + baud + ', 8N1')
 
 packet = ''
 preamble = '~~'
+previous_time=0
 
 while True:
     if len(sys.argv) >=  2:
@@ -219,19 +221,32 @@ while True:
             if request != "":
                 packet = encode_request(request)
     
-      #if there is no additional argument, the program send base64 string.
+    #if there is no additional argument, the program send base64 string.
     else:
-       read_file = open ('./tflite1/encoded_string.txt', 'r')
-       data = read_file.read()
 
        #first creates data type 'vps_shot'
        request = 'create input str vps_shot'
        encode_and_send(request)
+       
+       #get the encoded_string.txt file's information
+       path = './tflite1/encoded_string.txt'
+       status=os.stat(path)
 
-       #send one vps_shot every one minute
-       while True:
+
+       #check if the base64 string is updated by checking the modified time, and if it is modified, send the string to orp
+       while(previous_time != status.st_mtime_ns):
+           
+           previous_time=status.st_mtime_ns
+           print("status:", status.st_mtime_ns)
+           print("previous_time:", previous_time)
+           #read the encoded_string file and send to ORP
+           read_file = open ('./tflite1/encoded_string.txt', 'r')
+           data = read_file.read()
+           
+           #send one vps_shot every one minute
            request = 'push str vps_shot 0 {0}'.format(data)
            encode_and_send(request)
            #print (data)
-           sleep(60)
+           sleep(30)
+
 

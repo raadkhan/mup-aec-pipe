@@ -26,7 +26,9 @@ import sys
 import time
 from threading import Thread
 import importlib.util
-from picamera import PiCamera
+import threading
+
+
 
 #added by Seungmin
 import base64
@@ -79,6 +81,12 @@ class VideoStream:
 	# Indicate that the camera and thread should be stopped
         self.stopped = True
 
+    
+def createfile():
+    with open('encoded_string.txt' ,'wb') as f:
+        f.write(jpg_as_text)
+        time.sleep(0)
+    
 # Define and parse input arguments
 parser = argparse.ArgumentParser()
 
@@ -248,15 +256,16 @@ while True:
                 print(jpg_as_text[:80])
                
                 #writing a txt.file
-                with open('encoded_string.txt' ,'wb') as f:
-                    f.write(jpg_as_text)
-                    time.sleep(1)
+                #thread1=threading.Thread(target=createfile())
+                #thread1.start()
+                createfile()
                 #once human is detected, it call the orp_test.py
                # import orp_test
 
                 #(No longer is used)Save the image file as 'opencv.png' save in directory. 
-                #cv2.imwrite('opencv.png',image)
-                #print("Human Detected. Image is saved")
+                    
+                cv2.imwrite('opencv.png',image)
+                print("Human Detected. Image is saved")
                 
     # Draw framerate in corner of frame
     cv2.putText(frame,'FPS: {0:.2f}'.format(frame_rate_calc),(30,50),cv2.FONT_HERSHEY_SIMPLEX,1,(255,255,0),2,cv2.LINE_AA)
