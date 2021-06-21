@@ -241,8 +241,8 @@ while True:
             cv2.putText(frame, label, (xmin, label_ymin-7), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 0), 2) # Draw label text
             
             #code added by Seungmin
-            # if Human is detected and confidentility is high enough, execute the following code:
-            if object_name == 'person' and int(scores[i]*100) >50 :
+            # if Human is detected and confidence Level is high enough, execute the following code:
+            if object_name == 'person' and int(scores[i]*100) >60 :
                 
                 #Captured image is saved as "image"
                 image=videostream.read()
