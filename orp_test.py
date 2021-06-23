@@ -2,8 +2,13 @@
 #
 # Filename:  orp_test.py
 #
-# Purpose:   Python test script to send and receive HDLC framed commands
-#            using the Octave Resource Protocol
+# Purpose: Python script to receives a base64 string from a raspberry pi, and 
+#          use UART connection to send the base64 string to Octave by using 
+#          ORP(Octave Resource Protocol). This script can also run a HDLC framed
+#          commands using ORP. 
+#          
+#
+# Editor: Seungmin, Raad
 #
 # MIT License
 #
@@ -222,14 +227,14 @@ if len(sys.argv) >=  2:
             if request != "":
                 packet = encode_request(request)
     
-#if there is no additional argument, the program send base64 string if encdoed_string.txt is updated
+#if there is no additional argument, the program sends the base64 string if 'encdoed_string.txt' file is updated
 else:
     #first creates data type 'vps_shot'
     request = 'create input str vps_shot'
     encode_and_send(request)
     while(1):   
-       #get the encoded_string.txt file's information
-       path = './tflite1/encoded_string.txt'
+       #get the encoded_string.txt file's information. ~ represents home/pi
+       path = '/home/pi/code/mup-aec-pipe/tflite1/encoded_string.txt'
        status=os.stat(path)
        print("waiting for new base64 string...") 
     
@@ -238,7 +243,7 @@ else:
            
            previous_time=status.st_mtime_ns
            #read the encoded_string file
-           read_file = open ('./tflite1/encoded_string.txt', 'r')
+           read_file = open (path, 'r')
            data = read_file.read()
            
            #send one vps_shot every 30seconds
