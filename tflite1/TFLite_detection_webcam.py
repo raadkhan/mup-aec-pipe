@@ -33,8 +33,8 @@ import threading
 #added by Seungmin
 import base64
 #Adding the upper directory so that orp_test.py can communicate with this this file.
-sys.path.append('..')
-import test2
+#sys.path.append('..')
+#import test2
 #import orp_test
 
 # Define VideoStream class to handle streaming of video from webcam in separate processing thread
@@ -83,7 +83,11 @@ class VideoStream:
 
     
 def createfile():
-    with open('encoded_string.txt' ,'wb') as f:
+    save_path = '/home/pi/code/mup-aec-pipe/tflite1'
+    file_name = 'encoded_string.txt'
+    completeName = os.path.join(save_path, file_name)
+
+    with open(completeName,'wb') as f:
         f.write(jpg_as_text)
         time.sleep(0)
     
@@ -135,8 +139,8 @@ if use_TPU:
         GRAPH_NAME = 'edgetpu.tflite'       
 
 # Get path to current working directory
-CWD_PATH = os.getcwd()
-
+#CWD_PATH = os.getcwd()
+CWD_PATH = '/home/pi/code/mup-aec-pipe/tflite1'
 # Path to .tflite file, which contains the model that is used for object detection
 PATH_TO_CKPT = os.path.join(CWD_PATH,MODEL_NAME,GRAPH_NAME)
 
