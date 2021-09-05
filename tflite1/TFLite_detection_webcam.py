@@ -105,6 +105,10 @@ parser.add_argument('--threshold', help='Minimum confidence threshold for displa
                     default=0.5)
 parser.add_argument('--resolution', help='Desired webcam resolution in WxH. If the webcam does not support the resolution entered, errors may occur.',
                     default='256x144')
+
+#parser.add_argument('--resolution', help='Desired webcam resolution in WxH. If the webcam does not support the resolution entered, errors may occur.',
+#                    default='1024x576')
+
 parser.add_argument('--edgetpu', help='Use Coral Edge TPU Accelerator to speed up detection',
                     action='store_true')
 
@@ -246,7 +250,8 @@ while True:
             
             #code added by Seungmin
             # if Human is detected and confidence Level is high enough, execute the following code:
-            if object_name == 'person' and int(scores[i]*100) >60 :
+            
+            if object_name == 'person' and int(scores[i]*100) >70 :
                 
                 #Captured image is saved as "image"
                 image=videostream.read()
@@ -268,8 +273,12 @@ while True:
 
                 #(No longer is used)Save the image file as 'opencv.png' save in directory. 
                     
-                cv2.imwrite('opencv.png',image)
+                cv2.imwrite("opencv.png",image)
                 print("Human Detected. Image is saved")
+                
+                f = open("base64.txt","w")
+                f.write("%s" % (jpg_as_text))
+                f.close()
                 
     # Draw framerate in corner of frame
     cv2.putText(frame,'FPS: {0:.2f}'.format(frame_rate_calc),(30,50),cv2.FONT_HERSHEY_SIMPLEX,1,(255,255,0),2,cv2.LINE_AA)
