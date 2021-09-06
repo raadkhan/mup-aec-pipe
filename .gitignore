@@ -5,3 +5,4 @@ modules/__pycache__/
 pyvenv.cfg
 setup.py
 share/
+*.png
