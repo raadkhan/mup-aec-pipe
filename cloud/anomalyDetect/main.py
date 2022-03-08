@@ -1,13 +1,13 @@
 from google.cloud import firestore
 from datetime import datetime, timedelta
 from statistics import mean, pstdev
-from math import exp
+from math import pi, exp
 
 client = firestore.Client()
 
 frequency_profile = {
     'type': 'high',
-    'value': 60 # msgs/day
+    'value': 168 # msgs/day
 }    
 
 anomaly_profile = {
@@ -53,12 +53,20 @@ def anomalyDetect(data, context):
     for value in sens_dp_values:
         values.append(value.to_dict().get('value'))
         
+    print(len(values))
+
     if len(values) >= anomaly_profile['delta']*frequency_profile['value']: 
         avg = mean(values)
         stddev = pstdev(values)
-        up_limit = avg + 3*exp(10*stddev/avg)
-        lo_limit = avg - 3*exp(10*stddev/avg)
-        print(f'{up_limit} {avg} {stddev} {lo_limit}')
+
+        if stddev < 1:
+            up_limit = avg + pi*exp(stddev)
+            lo_limit = avg - pi*exp(stddev)
+        else:
+            up_limit = avg + pi*stddev
+            lo_limit = avg - pi*stddev
+
+        print(f'up limit = {up_limit} avg = {avg} stddev = {stddev} lo limit = {lo_limit}')
     else:
         print('calibrating...')
         return
