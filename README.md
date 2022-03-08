@@ -1,1 +1,1 @@
-# mup-octave-firmware
+# mup-aec(asset, edge, cloud)-pipe
