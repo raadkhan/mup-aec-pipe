@@ -52,8 +52,6 @@ def anomalyDetect(data, context):
     values = []
     for value in sens_dp_values:
         values.append(value.to_dict().get('value'))
-        
-    print(len(values))
 
     if len(values) >= anomaly_profile['delta']*frequency_profile['value']: 
         avg = mean(values)
