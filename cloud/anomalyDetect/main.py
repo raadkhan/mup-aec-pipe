@@ -33,12 +33,14 @@ def anomalyDetect(data, context):
 
     sens_dps = client.collection(collection_path)
 
+    sens_dp_imei = data['value']['fields']['imei']['integerValue']
     sens_dp_type = data['value']['fields']['type']['stringValue']
     sens_dp_timestamp = data['value']['fields']['timestamp']['integerValue']
     sens_dp_value = data['value']['fields']['value']['doubleValue']
     sens_dp_unit = data['value']['fields']['unit']['stringValue']
 
     sens_dp = {
+        'imei': sens_dp_imei,
         'type': sens_dp_type,
         'timestamp': sens_dp_timestamp,
         'value': sens_dp_value,
@@ -49,6 +51,7 @@ def anomalyDetect(data, context):
     past = (timedelta(days=-anomaly_profile['delta']) + present).timestamp()*1000
     
     sens_dp_values = sens_dps.where(
+        'imei', '==', sens_dp_imei).where(
         'type', '==', sens_dp_type).where(
         'timestamp', '>=', past).where(
         'timestamp', '!=', sens_dp_timestamp).where(
