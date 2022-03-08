@@ -1,4 +1,4 @@
-#============================================================================
+# ============================================================================
 #
 # Filename:  orp_protocol.py
 #
@@ -27,7 +27,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 #
-#----------------------------------------------------------------------------
+# ----------------------------------------------------------------------------
 #
 # NOTES:
 #
@@ -39,119 +39,121 @@ import shlex
 #
 # Packet type field - byte 0
 #
-ORP_PKT_RQST_INPUT_CREATE   = 'I'   # type[1] d_type[1] pad[2] path[] units[]
-ORP_PKT_RESP_INPUT_CREATE   = 'i'   # type[1] status[1] pad[2]
+ORP_PKT_RQST_INPUT_CREATE = 'I'   # type[1] d_type[1] pad[2] path[] units[]
+ORP_PKT_RESP_INPUT_CREATE = 'i'   # type[1] status[1] pad[2]
 
-ORP_PKT_RQST_OUTPUT_CREATE  = 'O'   # type[1] d_type[1] pad[2] path[] units[]
-ORP_PKT_RESP_OUTPUT_CREATE  = 'o'   # type[1] status[1] pad[2]
+ORP_PKT_RQST_OUTPUT_CREATE = 'O'   # type[1] d_type[1] pad[2] path[] units[]
+ORP_PKT_RESP_OUTPUT_CREATE = 'o'   # type[1] status[1] pad[2]
 
-ORP_PKT_RQST_DELETE         = 'D'   # type[1] pad[1]    pad[2] path[]
-ORP_PKT_RESP_DELETE         = 'd'   # type[1] status[1] pad[2]
+ORP_PKT_RQST_DELETE = 'D'   # type[1] pad[1]    pad[2] path[]
+ORP_PKT_RESP_DELETE = 'd'   # type[1] status[1] pad[2]
 
-ORP_PKT_RQST_HANDLER_ADD    = 'H'   # type[1] pad[1]    pad[2] path[]
-ORP_PKT_RESP_HANDLER_ADD    = 'h'   # type[1] status[1] pad[2]
+ORP_PKT_RQST_HANDLER_ADD = 'H'   # type[1] pad[1]    pad[2] path[]
+ORP_PKT_RESP_HANDLER_ADD = 'h'   # type[1] status[1] pad[2]
 
 ORP_PKT_RQST_HANDLER_REMOVE = 'K'   # type[1] pad[1]    pad[2] path[]
 ORP_PKT_RESP_HANDLER_REMOVE = 'k'   # type[1] status[1] pad[2]
 
-ORP_PKT_RQST_PUSH           = 'P'   # type[1] d_type[1] pad[2] time[] path[] data[]
-ORP_PKT_RESP_PUSH           = 'p'   # type[1] status[1] pad[2]
+ORP_PKT_RQST_PUSH = 'P'   # type[1] d_type[1] pad[2] time[] path[] data[]
+ORP_PKT_RESP_PUSH = 'p'   # type[1] status[1] pad[2]
 
-ORP_PKT_RQST_GET            = 'G'   # type[1] pad[1]    pad[2] path[]
-ORP_PKT_RESP_GET            = 'g'   # type[1] status[1] pad[2] time[] data[]
+ORP_PKT_RQST_GET = 'G'   # type[1] pad[1]    pad[2] path[]
+ORP_PKT_RESP_GET = 'g'   # type[1] status[1] pad[2] time[] data[]
 
-ORP_PKT_RQST_EXAMPLE_SET    = 'E'   # type[1] d_type[1] pad[2] path[] data[]
-ORP_PKT_RESP_EXAMPLE_SET    = 'e'   # type[1] status[1] pad[2]
+ORP_PKT_RQST_EXAMPLE_SET = 'E'   # type[1] d_type[1] pad[2] path[] data[]
+ORP_PKT_RESP_EXAMPLE_SET = 'e'   # type[1] status[1] pad[2]
 
-ORP_PKT_RQST_SENSOR_CREATE  = 'S'   # type[1] d_type[1] pad[2] path[] units[]
-ORP_PKT_RESP_SENSOR_CREATE  = 's'   # type[1] status[1] pad[2]
+ORP_PKT_RQST_SENSOR_CREATE = 'S'   # type[1] d_type[1] pad[2] path[] units[]
+ORP_PKT_RESP_SENSOR_CREATE = 's'   # type[1] status[1] pad[2]
 
-ORP_PKT_RQST_SENSOR_REMOVE  = 'R'   # type[1] pad[1]    pad[2] path[]
-ORP_PKT_RESP_SENSOR_REMOVE  = 'r'   # type[1] status[1] pad[2]
+ORP_PKT_RQST_SENSOR_REMOVE = 'R'   # type[1] pad[1]    pad[2] path[]
+ORP_PKT_RESP_SENSOR_REMOVE = 'r'   # type[1] status[1] pad[2]
 
-ORP_PKT_NTFY_HANDLER_CALL   = 'c'   # type[1] d_type[1] pad[2] time[] path[] data[]
-ORP_PKT_RESP_HANDLER_CALL   = 'C'   # type[1] status[1] pad[2]
+# type[1] d_type[1] pad[2] time[] path[] data[]
+ORP_PKT_NTFY_HANDLER_CALL = 'c'
+ORP_PKT_RESP_HANDLER_CALL = 'C'   # type[1] status[1] pad[2]
 
-ORP_PKT_NTFY_SENSOR_CALL    = 'b'   # type[1] pad[1]    pad[2] path[]
-ORP_PKT_RESP_SENSOR_CALL    = 'B'   # type[1] status[1] pad[2]
+ORP_PKT_NTFY_SENSOR_CALL = 'b'   # type[1] pad[1]    pad[2] path[]
+ORP_PKT_RESP_SENSOR_CALL = 'B'   # type[1] status[1] pad[2]
 
 # Version 2
-ORP_PKT_SYNC_SYN            = 'Y'   # type[1] version[1] unused[2] time[] sent[] received[]
-ORP_PKT_SYNC_SYNACK         = 'z'   # type[1] version[1] unused[2] sent[] received[]
-ORP_PKT_SYNC_ACK            = 'y'   # type[1] version[1] unused[2]
+# type[1] version[1] unused[2] time[] sent[] received[]
+ORP_PKT_SYNC_SYN = 'Y'
+ORP_PKT_SYNC_SYNACK = 'z'   # type[1] version[1] unused[2] sent[] received[]
+ORP_PKT_SYNC_ACK = 'y'   # type[1] version[1] unused[2]
 
-ORP_PKT_RESP_UNKNOWN_RQST   = '?'   # type[1] status[1] pad[2]
+ORP_PKT_RESP_UNKNOWN_RQST = '?'   # type[1] status[1] pad[2]
 
 
 #
 # Data type field - byte 1
 #
-ORP_DATA_TYPE_TRIGGER       = 'T'   # trigger - no data
-ORP_DATA_TYPE_BOOLEAN       = 'B'   # Boolean - 1 byte:  't' | 'f'
-ORP_DATA_TYPE_NUMERIC       = 'N'   # numeric - null-terminated ASCII string, representing double
-ORP_DATA_TYPE_STRING        = 'S'   # string  - null-terminated ASCII string
-ORP_DATA_TYPE_JSON          = 'J'   # JSON    - null-terminated ASCII string, representing JSON
-ORP_DATA_TYPE_UNDEF         = ' '   # not specified
+ORP_DATA_TYPE_TRIGGER = 'T'   # trigger - no data
+ORP_DATA_TYPE_BOOLEAN = 'B'   # Boolean - 1 byte:  't' | 'f'
+# numeric - null-terminated ASCII string, representing double
+ORP_DATA_TYPE_NUMERIC = 'N'
+ORP_DATA_TYPE_STRING = 'S'   # string  - null-terminated ASCII string
+ORP_DATA_TYPE_JSON = 'J'   # JSON    - null-terminated ASCII string, representing JSON
+ORP_DATA_TYPE_UNDEF = ' '   # not specified
 
 
 #
 # Variable length field identifiers
 #
-ORP_FIELD_ID_PATH           = 'P'
-ORP_FIELD_ID_TIME           = 'T'
-ORP_FIELD_ID_UNITS          = 'U'
-ORP_FIELD_ID_DATA           = 'D'
+ORP_FIELD_ID_PATH = 'P'
+ORP_FIELD_ID_TIME = 'T'
+ORP_FIELD_ID_UNITS = 'U'
+ORP_FIELD_ID_DATA = 'D'
 
 # Variable length field separator
-ORP_VARLENGTH_SEPARATOR     = ','
-
+ORP_VARLENGTH_SEPARATOR = ','
 
 
 #
 # Packet type descriptions
 #
 ptypes = [
-    [ ORP_PKT_RQST_INPUT_CREATE,   'request create input'     ],
-    [ ORP_PKT_RESP_INPUT_CREATE,   'response create input'    ],
+    [ORP_PKT_RQST_INPUT_CREATE,   'request create input'],
+    [ORP_PKT_RESP_INPUT_CREATE,   'response create input'],
 
-    [ ORP_PKT_RQST_OUTPUT_CREATE,  'request create output'    ],
-    [ ORP_PKT_RESP_OUTPUT_CREATE,  'response create output'   ],
+    [ORP_PKT_RQST_OUTPUT_CREATE,  'request create output'],
+    [ORP_PKT_RESP_OUTPUT_CREATE,  'response create output'],
 
-    [ ORP_PKT_RQST_DELETE,         'request delete resource'  ],
-    [ ORP_PKT_RESP_DELETE,         'response delete resource' ],
+    [ORP_PKT_RQST_DELETE,         'request delete resource'],
+    [ORP_PKT_RESP_DELETE,         'response delete resource'],
 
-    [ ORP_PKT_RQST_HANDLER_ADD,    'request add handler'      ],
-    [ ORP_PKT_RESP_HANDLER_ADD,    'response add handler'     ],
+    [ORP_PKT_RQST_HANDLER_ADD,    'request add handler'],
+    [ORP_PKT_RESP_HANDLER_ADD,    'response add handler'],
 
-    [ ORP_PKT_RQST_HANDLER_REMOVE, 'request remove handler'   ],
-    [ ORP_PKT_RESP_HANDLER_REMOVE, 'response remove handler'  ],
+    [ORP_PKT_RQST_HANDLER_REMOVE, 'request remove handler'],
+    [ORP_PKT_RESP_HANDLER_REMOVE, 'response remove handler'],
 
-    [ ORP_PKT_RQST_PUSH,           'request push'             ],
-    [ ORP_PKT_RESP_PUSH,           'response push'            ],
+    [ORP_PKT_RQST_PUSH,           'request push'],
+    [ORP_PKT_RESP_PUSH,           'response push'],
 
-    [ ORP_PKT_RQST_GET,            'request get'              ],
-    [ ORP_PKT_RESP_GET,            'response get'             ],
+    [ORP_PKT_RQST_GET,            'request get'],
+    [ORP_PKT_RESP_GET,            'response get'],
 
-    [ ORP_PKT_RQST_EXAMPLE_SET,    'request set example'      ],
-    [ ORP_PKT_RESP_EXAMPLE_SET,    'response set example'     ],
+    [ORP_PKT_RQST_EXAMPLE_SET,    'request set example'],
+    [ORP_PKT_RESP_EXAMPLE_SET,    'response set example'],
 
-    [ ORP_PKT_RQST_SENSOR_CREATE,  'request create sensor'    ],
-    [ ORP_PKT_RESP_SENSOR_CREATE,  'response create sensor'   ],
+    [ORP_PKT_RQST_SENSOR_CREATE,  'request create sensor'],
+    [ORP_PKT_RESP_SENSOR_CREATE,  'response create sensor'],
 
-    [ ORP_PKT_RQST_SENSOR_REMOVE,  'request remove sensor'    ],
-    [ ORP_PKT_RESP_SENSOR_REMOVE,  'response remove sensor'   ],
+    [ORP_PKT_RQST_SENSOR_REMOVE,  'request remove sensor'],
+    [ORP_PKT_RESP_SENSOR_REMOVE,  'response remove sensor'],
 
-    [ ORP_PKT_NTFY_HANDLER_CALL,   'handler call'             ],
-    [ ORP_PKT_RESP_HANDLER_CALL,   'handler ack'              ],
+    [ORP_PKT_NTFY_HANDLER_CALL,   'handler call'],
+    [ORP_PKT_RESP_HANDLER_CALL,   'handler ack'],
 
-    [ ORP_PKT_NTFY_SENSOR_CALL,    'sensor poll'              ],
-    [ ORP_PKT_RESP_SENSOR_CALL,    'sensor poll ack'          ],
+    [ORP_PKT_NTFY_SENSOR_CALL,    'sensor poll'],
+    [ORP_PKT_RESP_SENSOR_CALL,    'sensor poll ack'],
 
     # Version 2
-    [ ORP_PKT_SYNC_SYN,            'sync packet'              ],
-    [ ORP_PKT_SYNC_SYNACK,         'sync ack packet'          ],
+    [ORP_PKT_SYNC_SYN,            'sync packet'],
+    [ORP_PKT_SYNC_SYNACK,         'sync ack packet'],
 
-    [ ORP_PKT_RESP_UNKNOWN_RQST,   'unknown packet type'      ],
+    [ORP_PKT_RESP_UNKNOWN_RQST,   'unknown packet type'],
 ]
 
 
@@ -189,11 +191,11 @@ status_list = [
 # Data types
 #
 data_types = [
-    [ 'trig',   ORP_DATA_TYPE_TRIGGER ],
-    [ 'bool',   ORP_DATA_TYPE_BOOLEAN ],
-    [ 'num',    ORP_DATA_TYPE_NUMERIC ],
-    [ 'str',    ORP_DATA_TYPE_STRING  ],
-    [ 'json',   ORP_DATA_TYPE_JSON    ]
+    ['trig',   ORP_DATA_TYPE_TRIGGER],
+    ['bool',   ORP_DATA_TYPE_BOOLEAN],
+    ['num',    ORP_DATA_TYPE_NUMERIC],
+    ['str',    ORP_DATA_TYPE_STRING],
+    ['json',   ORP_DATA_TYPE_JSON]
 ]
 
 
@@ -221,6 +223,8 @@ recvCount = 0
 #
 # Usage
 #
+
+
 def print_usage():
 
     print('Usage:')
@@ -237,7 +241,7 @@ def encode_dtype(data_type):
     field = ''
     dtype = data_type.lower()
 
-    if   dtype[0] == 't':
+    if dtype[0] == 't':
         field = field + ORP_DATA_TYPE_TRIGGER
 
     elif dtype[0] == 'b':
@@ -261,6 +265,8 @@ def encode_dtype(data_type):
 #
 # Encode sequence number
 #
+
+
 def encode_sequence(count):
     seq0 = count & 0x00ff
     seq1 = count & 0xff00
@@ -276,10 +282,13 @@ def increment_encode_sequence():
     sentCount += 1
     return encode_sequence(sentCount)
 
+
 sentCount
 #
 # Encode path
 #
+
+
 def encode_path(path):
 
     return ORP_FIELD_ID_PATH + path
@@ -318,17 +327,16 @@ def encode_create(argc, args):
     dtype = ''
     syntax = syntax_list[0]
 
-
-    if argc < 3 :
+    if argc < 3:
         print('Invalid number of arguments')
         print(syntax_list[0])
         return
 
-    if argc > 3 :
-        what,data_type,path,units = args.split(' ')
+    if argc > 3:
+        what, data_type, path, units = args.split(' ')
 
     else:
-        what,data_type,path = args.split(' ')
+        what, data_type, path = args.split(' ')
         units = None
 
     what = what.lower()
@@ -363,13 +371,12 @@ def encode_delete(argc, args):
 
     packet = ''
 
-
-    if argc < 2 :
+    if argc < 2:
         print('Invalid number of arguments')
         print(syntax_list[1])
         return
 
-    what,path = args.split(' ')
+    what, path = args.split(' ')
     what = what.lower()
 
     # packet type
@@ -398,13 +405,12 @@ def encode_add(argc, args):
 
     packet = ''
 
-
-    if argc < 2 :
+    if argc < 2:
         print('Invalid number of arguments')
         print(syntax_list[2])
         return
 
-    what,path = args.split(' ')
+    what, path = args.split(' ')
     what = what.lower()
 
     if what[0] != 'h':
@@ -429,14 +435,14 @@ def encode_push(argc, args):
     packet = ''
     dtype = ''
 
-    if argc < 3 :
+    if argc < 3:
         print('Invalid number of arguments')
         print(syntax_list[3])
         return
 
     print('argc: ' + str(argc))
     # all types which require data
-    if argc > 3 :
+    if argc > 3:
         data_type, path, timestamp, data = args.split(' ', 3)
 
     # trigger type - no data
@@ -493,7 +499,7 @@ def encode_get(argc, args):
     packet = ''
     dtype = ''
 
-    if argc < 1 :
+    if argc < 1:
         print('Invalid number of arguments')
         print(syntax_list[4])
         return
@@ -507,7 +513,6 @@ def encode_get(argc, args):
     return packet
 
 
-
 #
 # example data-type path [data]
 #
@@ -516,17 +521,17 @@ def encode_example(argc, args):
     packet = ''
     dtype = ''
 
-    if argc < 2 :
+    if argc < 2:
         print('Invalid number of arguments')
         print(syntax_list[5])
         return
 
     print('argc: ' + str(argc))
-    if argc > 2 :
-        data_type,path,data = args.split(' ', 2)
+    if argc > 2:
+        data_type, path, data = args.split(' ', 2)
 
     else:
-        data_type,path = args.split(' ')
+        data_type, path = args.split(' ')
         data = ''
 
     packet = packet + ORP_PKT_RQST_EXAMPLE_SET
@@ -553,12 +558,12 @@ def encode_acknowledge(argc, args):
     packet = ''
     dtype = ''
 
-    if argc < 2 :
+    if argc < 2:
         print('Invalid number of arguments')
         print(syntax_list[6])
         return
 
-    what,status = args.split(' ')
+    what, status = args.split(' ')
 
     # packet type
     if what[0] == 'y':
@@ -583,18 +588,18 @@ def encode_acknowledge(argc, args):
 #
 def encode_request(request):
 
-    if request.find(' ') < 0 :
+    if request.find(' ') < 0:
         print_usage()
         return
 
     argc = len(request.split(' ')) - 1
 
     # all commands take at least one argument
-    if argc < 1 :
+    if argc < 1:
         print_usage()
         return
 
-    request_type,args = request.split(' ', 1)
+    request_type, args = request.split(' ', 1)
     request_type = request_type.lower()
 
     if request_type[0] == 'c':
@@ -638,21 +643,22 @@ def decode_response(response):
 
     if sys.version_info[0] == 2:
         # Positional fields:
-        ptype      = response[0]
+        ptype = response[0]
         status_ver = ord(response[1])
-        seq_num    = int(response[2:4])
+        seq_num = int(response[2:4])
         # Labeled, variable length fields
         var_length = response[4:]
         print('Received     : ' + response)
 
     else:
         # Positional fields:
-        ptype      = chr(response[0])
+        ptype = chr(response[0])
         status_ver = response[1]
-        seq_num    = int(response[2:4])
+        seq_num = int(response[2:4])
         # Labeled, variable length fields
         var_length = (response[4:len(response)]).decode("utf-8")
-        print('Received     : ' + chr(response[0]) + chr(response[1]) + chr(response[2]) + chr(response[3]) + var_length)
+        print('Received     : ' + chr(response[0]) + chr(
+            response[1]) + chr(response[2]) + chr(response[3]) + var_length)
 
     for i in range(len(ptypes)):
         test = ptypes[i]

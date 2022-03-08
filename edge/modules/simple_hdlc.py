@@ -129,7 +129,8 @@ class Frame(object):
         if not res:
             c1 = six.binary_type(crc)
             c2 = six.binary_type(calcCRC(data_without_crc))
-            logger.warning("invalid crc %s != %s <- our calculation", bin_to_hex(c1), bin_to_hex(c2))
+            logger.warning("invalid crc %s != %s <- our calculation",
+                           bin_to_hex(c1), bin_to_hex(c2))
         return res
 
     def toString(self):

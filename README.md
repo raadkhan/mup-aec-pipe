@@ -1,4 +1,11 @@
 # mup-aec(asset, edge, cloud)-pipe
+the software to connect the asset (a Raspberry Pi with a day/night fisheye camera), the edge (a mangOH Yellow), and the cloud (Cloud Firestore on Firebase) to the MUP (Monitoring Unoccupied Properties) pipeline, Octave by Sierra Wireless.
 
-# bash Command
-To run 'orp_test' & ' TFLite_detection_webcam.py' together go to ./tflite and run bash command 'python3 TFLite_detection_webcam.py & python3 ../orp_test.py &'
+## asset software
+a modified TFLite classifier to detect and capture human intruders at the property.
+
+## edge software
+a Python script to transmit the asset's shot of the human intruder to the pipeline via the edge.
+
+## cloud software
+a Firebase Cloud Function to detect and alert the owner about anomalies at the property seen by the edge.

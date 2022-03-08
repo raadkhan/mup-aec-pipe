@@ -7,11 +7,11 @@ client = firestore.Client()
 
 frequency_profile = {
     'type': 'high',
-    'value': 168 # msgs/day
-}    
+    'value': 168  # msgs/day
+}
 
 anomaly_profile = {
-    'delta': 1, # days
+    'delta': 1,  # days
     'breath_voc_lo_limit': None,
     'breath_voc_up_limit': None,
     'co2e_lo_limit': None,
@@ -26,6 +26,7 @@ anomaly_profile = {
     'temp_up_limit': None
 }
 
+
 def anomalyDetect(data, context):
     full_path = context.resource.split('/documents/')[1].split('/')
     collection_path = full_path[0]
@@ -35,13 +36,15 @@ def anomalyDetect(data, context):
 
     sens_dp_imei = int(data['value']['fields']['imei']['integerValue'])
     sens_dp_type = data['value']['fields']['type']['stringValue']
-    sens_dp_timestamp = int(data['value']['fields']['timestamp']['integerValue'])
+    sens_dp_timestamp = int(data['value']['fields']
+                            ['timestamp']['integerValue'])
     sens_dp_value = data['value']['fields']['value']['doubleValue']
     sens_dp_unit = data['value']['fields']['unit']['stringValue']
-    
+
     present = datetime.fromtimestamp(sens_dp_timestamp/1000)
-    past = int((timedelta(days=-anomaly_profile['delta']) + present).timestamp())*1000
-    
+    past = int(
+        (timedelta(days=-anomaly_profile['delta']) + present).timestamp())*1000
+
     sens_dp_values = sens_dps.where(
         'anomaly', '==', False).where(
         'imei', '==', sens_dp_imei).where(
@@ -53,7 +56,7 @@ def anomalyDetect(data, context):
     for value in sens_dp_values:
         values.append(value.to_dict().get('value'))
 
-    if len(values) >= anomaly_profile['delta']*frequency_profile['value']: 
+    if len(values) >= anomaly_profile['delta']*frequency_profile['value']:
         avg = mean(values)
         stddev = pstdev(values)
 
@@ -64,13 +67,16 @@ def anomalyDetect(data, context):
             up_limit = avg + pi*stddev
             lo_limit = avg - pi*stddev
 
-        print(f'up limit = {up_limit} avg = {avg} stddev = {stddev} lo limit = {lo_limit}')
+        print(
+            f'up limit = {up_limit} avg = {avg} stddev = {stddev} lo limit = {lo_limit}')
     else:
         print('calibrating...')
         return
-        
+
     if sens_dp_value < lo_limit or sens_dp_value > up_limit:
-        print(f"check out your property: detected an anomalous {sens_dp_type} of {sens_dp_value:.3f} {sens_dp_unit} at {present}")
+        print(
+            f"check out your property: detected an anomalous {sens_dp_type} of {sens_dp_value:.3f} {sens_dp_unit} at {present}")
         sens_dps.document(document_path).set({'anomaly': True}, merge=True)
     else:
-        print(f"all is well at your property: {sens_dp_type} was {sens_dp_value:.3f} {sens_dp_unit} just now")
+        print(
+            f"all is well at your property: {sens_dp_type} was {sens_dp_value:.3f} {sens_dp_unit} just now")
