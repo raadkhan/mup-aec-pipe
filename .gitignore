@@ -1,0 +1,7 @@
+bin/
+lib/
+modules/simple_hdlc.pyc
+modules/__pycache__/
+pyvenv.cfg
+setup.py
+share/

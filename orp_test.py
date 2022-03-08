@@ -41,17 +41,13 @@
 #    Linux
 #    > sudo -H pip3 install six pythoncrc pyserial
 #
-# 3. To test
-#     Linux: python3 orp_test.py --dev /dev/ttyUSB0 --b 9600
 
 import sys
 import os
 from time import sleep
-import argparse
 import serial
-import random
-import array
-from array import array
+from random import randint
+
 # Import local versions of orp_protocol and simple_hdlc
 if sys.version_info[0] == 2:
     # Python 2 - hack
@@ -69,10 +65,7 @@ else:
     import modules.orp_protocol as orp_protocol
     from modules.orp_protocol import decode_response
     from modules.orp_protocol import encode_request
-    
-    #testing
-    from modules.orp_protocol import encode_push 
-    from modules.orp_protocol import encode_create
+
 #
 # Function to automatically reply to sync
 #
@@ -105,138 +98,130 @@ def sync_acknowledge(data):
 #
 def frame_callback(data):
     decode_response(data)
+    
     if auto_ack == True:
         sync_acknowledge(data)
 
 # =========================================================================== #
 
-#
 # Require minimum version of simple_hdlc
-#
 if float(hdlc_version) < 0.3 :
-    print('HDLC version: ' + hdlc_version + ' too old.  Minimum 0.3 required. Exiting')
+    print('HDLC version: ' + hdlc_version + ' too old. Minimum 0.3 required. Exiting')
     exit()
 
-#
-# Arguments
-#
-parser = argparse.ArgumentParser(description='Octave Resource Protocol Client Test Script',
-                                 usage="orp_test.py [-h] --dev DEV [--b BAUD] [--no-auto-ack]\n"
-		                               "Where:\n"
-                                       "  DEV is the serial port (e.g. COM3 on Windows or /dev/ttyUSB0 on Linux)\n"
-                                       "  BAUD is the baudrate (example 115200, default value is 9600)\n")
-parser.add_argument('--dev', help='serial device port (example COM3 on Windows or /dev/ttyUSB0 on Linux)', required=True )
-parser.add_argument('--b', help='baudrate of serial port. Example 115200, default value is 9600')
-parser.add_argument('--no-auto-ack', help='Disable automatic responses', action='store_false', required=False, default=True)
-args = parser.parse_args()
-
-
-
-dev=args.dev
-baud=9600
+dev='/dev/ttyUSB0'
+baud='9600'
 auto_ack = True
-if args.b:
-	baud=args.b
-if args.no_auto_ack == False:
-    auto_ack = False
-
-#
-# UART configuration
-#
-# Using the default: 8/N/1
+# Using the default UART config: 8/N/1
 s = serial.Serial(port=dev, baudrate=baud)
 
 h = HDLC(s)
 h.startReader(onFrame=frame_callback)
 
-print('ORP Serial Client - "q" to exit')
-print('using device: ' + dev + ', speed: ' + baud + ', 8N1')
+print('ORP VPS Client')
+print('device: ' + dev + ', speed: ' + baud + ', 8N1')
+
 if auto_ack == False:
     print('auto-acknowledgements disabled')
-print('enter commands\n')
-
-#Testing code
-print('ORP Serial Client - "t" to test')
-#test
-data=[]
-data=[100]
 
 packet = ''
 preamble = '~~'
-
-
-
 
 while True:
     if sys.version_info[0] == 2:
         request = raw_input('> ')
     else:
         request = input('> ')
-    if request == 'q':
-        print('exiting')
-        break
     
-    #testing code
     if request == 't':
-        request = 'create input num test'
-        request = request.rstrip()
-        if request != "":
-            packet = encode_request(request)
-
-        if packet != None:
-            s0 = ord(packet[2])
-            s1 = ord(packet[3])
-            prestr = 'Sending: ' + packet[0] + packet[1] + str(s0) + str(s1)
-            print((prestr + packet[4:75] + '..') if len(packet) > 75  else (prestr + packet[4:]))
-
-			# Wake up the WP UART with a preamble of 0x7E bytes
-            s.write(preamble.encode())
-            sleep(0.1)
-            s.write(preamble.encode())
-
-            h.sendFrame(packet.encode())
-            sleep(0.5)
-            
-        random_value=str(random.randint(1,1000))
-        request = 'push num test 0 %s' % (random_value)
-        request = request.rstrip()
-        if request != "":
-            packet = encode_request(request)
-
-        if packet != None:
-            s0 = ord(packet[2])
-            s1 = ord(packet[3])
-            prestr = 'Sending: ' + packet[0] + packet[1] + str(s0) + str(s1)
-            print((prestr + packet[4:75] + '..') if len(packet) > 75  else (prestr + packet[4:]))
-
-			# Wake up the WP UART with a preamble of 0x7E bytes
-            s.write(preamble.encode())
-            sleep(0.1)
-            s.write(preamble.encode())
-
-            h.sendFrame(packet.encode())
-            sleep(0.5)
-            break
-
-	# remove trailing whitespace
-    request = request.rstrip()
-    if request != "":
+        print('start testing')
+        
+        request = 'create input json vps_data'
         packet = encode_request(request)
+        s0 = ord(packet[2])
+        s1 = ord(packet[3])
+        prestr = 'Sending: ' + packet[0] + packet[1] + str(s0) + str(s1)
+        print((prestr + packet[4:75] + '..') if len(packet) > 75  else (prestr + packet[4:]))
 
-        if packet != None:
+        # Wake up the WP UART with a preamble of 0x7E bytes
+        s.write(preamble.encode())
+        sleep(0.1)
+        s.write(preamble.encode())
+
+        h.sendFrame(packet.encode())
+        sleep(0.5)
+        
+        request = 'example json vps_data "{"object":"HU", "confidence":99}"'
+        packet = encode_request(request)
+        s0 = ord(packet[2])
+        s1 = ord(packet[3])
+        prestr = 'Sending: ' + packet[0] + packet[1] + str(s0) + str(s1)
+        print((prestr + packet[4:75] + '..') if len(packet) > 75  else (prestr + packet[4:]))
+
+        # Wake up the WP UART with a preamble of 0x7E bytes
+        s.write(preamble.encode())
+        sleep(0.1)
+        s.write(preamble.encode())
+
+        h.sendFrame(packet.encode())
+        sleep(0.5)
+        
+        try:
+            while True:
+                vps_data = '{{"object":"HU", "confidence":{0}}}'.format(randint(50, 100))
+                request = 'push json vps_data 0 {0}'.format(vps_data)
+                packet = encode_request(request)
+                s0 = ord(packet[2])
+                s1 = ord(packet[3])
+                prestr = 'Sending: ' + packet[0] + packet[1] + str(s0) + str(s1)
+                print((prestr + packet[4:75] + '..') if len(packet) > 75  else (prestr + packet[4:]))
+
+                # Wake up the WP UART with a preamble of 0x7E bytes
+                s.write(preamble.encode())
+                sleep(0.1)
+                s.write(preamble.encode())
+
+                h.sendFrame(packet.encode())
+                sleep(0.5)
+                
+                sleep(60)
+                        
+        except KeyboardInterrupt:
+            print('interrupted testing')
+            
+            request = 'delete resource vps_data'
+            packet = encode_request(request)
             s0 = ord(packet[2])
             s1 = ord(packet[3])
             prestr = 'Sending: ' + packet[0] + packet[1] + str(s0) + str(s1)
             print((prestr + packet[4:75] + '..') if len(packet) > 75  else (prestr + packet[4:]))
 
-			# Wake up the WP UART with a preamble of 0x7E bytes
+            # Wake up the WP UART with a preamble of 0x7E bytes
             s.write(preamble.encode())
             sleep(0.1)
             s.write(preamble.encode())
 
             h.sendFrame(packet.encode())
             sleep(0.5)
+    elif request == 'q':
+        s.close()
+        break
+    else:        
+        # remove trailing whitespace
+        request = request.rstrip()
+        if request != "":
+            packet = encode_request(request)
+            print(packet)
+            if packet != None:
+                s0 = ord(packet[2])
+                s1 = ord(packet[3])
+                prestr = 'Sending: ' + packet[0] + packet[1] + str(s0) + str(s1)
+                print((prestr + packet[4:75] + '..') if len(packet) > 75  else (prestr + packet[4:]))
 
-sleep(0.5)
-s.close
+                # Wake up the WP UART with a preamble of 0x7E bytes
+                s.write(preamble.encode())
+                sleep(0.1)
+                s.write(preamble.encode())
 
+                h.sendFrame(packet.encode())
+                sleep(0.5)
